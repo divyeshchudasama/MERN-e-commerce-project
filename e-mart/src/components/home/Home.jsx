@@ -5,6 +5,7 @@ function Home() {
   return (
     <div>
       <h1>Home works</h1>
+      <p>gayithri</p>
     </div>
   );
 }
