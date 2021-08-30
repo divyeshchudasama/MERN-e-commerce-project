@@ -1,10 +1,15 @@
 import "./App.css";
+import Router from "./components/Router";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (
-    <div>
-      <h1>E-MART</h1>
-    </div>
+    <>
+      <Header />
+      <Router />
+      <Footer />
+    </>
   );
 }
 
