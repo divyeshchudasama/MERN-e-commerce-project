@@ -1,3 +1,30 @@
 .footerBg {
   background-color: #dbe2ef;
+  padding: 39px 0px;
+}
+li{
+  list-style-type: none;
+}
+.foot_ul{
+  padding-left: 0px; 
+  text-align: left;
+}
+.foot_ul li{
+  padding: 5px;
+}
+.foot_ul li span{
+  padding-left: 6px;
+}
+.base1{
+  padding-bottom: 5px;
+}
+.base2 {
+  margin-right: 20%;
+  
+}
+.bottfoot{
+  padding-top: 25px;
+margin-top: 25px;
+ border-top: 1px solid #757473;
+ color: #b2b2b2;
 }
