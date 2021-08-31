@@ -1,0 +1,30 @@
+.card {
+  border-radius: 25px;
+  border: 2px solid #dddddd;
+}
+.cardHeader {
+  background: none;
+  border-bottom: 0;
+}
+.input1 {
+  border-radius: 25px 0px 0px 25px;
+  background: none;
+  border: 2px solid #dddddd;
+}
+.input2 {
+  border-radius: 0px 25px 25px 0px;
+  background: none;
+  border: 2px solid #dddddd;
+}
+.btn {
+  border-radius: 25px;
+  width: 10em;
+}
+.btn:hover {
+  background-color: white;
+  color: #098a5a;
+  font-weight: 500;
+}
+.link {
+  text-decoration: none;
+}
