@@ -3,9 +3,13 @@ import styles from "./Footer.module.css";
 
 function Footer() {
   return (
-    <div>
-      <h1> footer works</h1>
-    </div>
+    <>
+      <footer className={`footer mt-auto py-3 bg-default ${styles.footerBg}`}>
+        <div className="container">
+          <span className="text-muted">Place footer content here.</span>
+        </div>
+      </footer>
+    </>
   );
 }
 
