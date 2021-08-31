@@ -5,7 +5,8 @@ function Home() {
   return (
     <div>
       <h1>Home works</h1>
-      <p>gayithri</p>
+      {/* <p>gayithri</p> */}
+      <button className="btn btn-success">Test button</button>
     </div>
   );
 }
