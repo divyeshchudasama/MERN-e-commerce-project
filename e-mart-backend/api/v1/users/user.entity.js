@@ -3,14 +3,16 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  userId: {
+  firstname: {
     type: String,
     require: true,
   },
-  userName: {
+  lastname: {
     type: String,
-    lowercase: true,
-    unique: true,
+    require: true,
+  },
+  email: {
+    type: String,
     require: true,
   },
   password: {
@@ -19,12 +21,12 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre("save", function (next) {
-  let user = this;
-  if (this.isModified("password") || this.isNew) {
-    console.log("user data");
-  } else {
-    next();
-  }
-});
+// UserSchema.pre("save", function (next) {
+//   let user = this;
+//   if (this.isModified("password") || this.isNew) {
+//     console.log("user data");
+//   } else {
+//     next();
+//   }
+// });
 module.exports = mongoose.model("user", UserSchema);

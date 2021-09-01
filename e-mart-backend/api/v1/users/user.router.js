@@ -2,18 +2,21 @@ const router = require("express").Router();
 const userController = require("./user.controller");
 
 router.post("/login", (req, res) => {
-  console.log("User Logged In");
-  userController.loginUser(req.body);
+  console.log("User Logging In");
+
+  // res.json({ message: userController.loginUser(req.body) });
+  let emp = userController.loginUser(req.body);
+  res.send(emp.toJSON());
 });
 
-router.post("/register", (req, res) => {
-  console.log("Sign Up");
-  //   const data = userController.registerUser(req.body);
+router.post("/register", async (req, res) => {
+  console.log("Signing Up");
+  await userController.registerUser(req.body);
 
-  res.end(`<h1>Data</h1> ${data}`);
+  res.send("Inserted");
 });
-router.get("/testget", (req, res) => {
-  console.log("testget");
-});
+// router.get("/testget", (req, res) => {
+//   console.log("testget");
+// });
 
 module.exports = router;

@@ -5,9 +5,14 @@ const { serverConfig } = require("./config").appConfig;
 const db = require("./db");
 
 //db connectivity
+let dbconnection;
 const connectToDatabase = () => {
   db.createMongoConnection();
   dbconnection = db.getMongoConnect();
+  dbconnection.on("error", console.error.bind(console, "connection error ☠"));
+  dbconnection.once("open", () => {
+    console.log("connection successful");
+  });
 };
 
 const setAppMiddleware = (app) => {

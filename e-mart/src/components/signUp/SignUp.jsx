@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faAt } from "@fortawesome/free-solid-svg-icons";
 import styles from "./SignUp.module.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 function SignUp() {
   const [userData, setUserData] = useState({
@@ -18,7 +20,29 @@ function SignUp() {
   };
   const signUphandle = (event) => {
     event.preventDefault();
-    console.log(userData);
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(`http://localhost:8000/api/v1/users/register`, userData, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const data = res.data;
+          // console.log(data);
+          toast.success("User Registered Successfully!", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
   };
   return (
     <>
@@ -116,6 +140,17 @@ function SignUp() {
           </Card>
         </Col>
       </Row>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
