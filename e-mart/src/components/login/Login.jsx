@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { Card, Col, Form, InputGroup, Row, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faKey } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styles from "./Login.module.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../action/index";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
+  const dispatch = useDispatch();
   const loginHandle = (event) => {
     event.preventDefault();
     let userDetails = {
@@ -26,17 +30,12 @@ function Login() {
       })
       .then((res) => {
         if (res.status === 200) {
-          const data = res.data;
-          console.log(data);
-          toast.success("You are successfully logged in", {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+          const data = res.data.details;
+          if (data) {
+            dispatch(addUser(data));
+            localStorage.setItem("user", JSON.stringify(data));
+            history.push({ pathname: "/", state: "" });
+          }
         } else {
           console.log("check email password");
         }

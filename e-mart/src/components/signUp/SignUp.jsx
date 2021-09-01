@@ -30,9 +30,8 @@ function SignUp() {
       })
       .then((res) => {
         if (res.status === 200) {
-          const data = res.data;
-          // console.log(data);
-          toast.success("User Registered Successfully!", {
+          const data = res.data.details;
+          toast.success(`${data.firstname} Registered Successfully!`, {
             position: "bottom-right",
             autoClose: 3000,
             hideProgressBar: false,
@@ -40,6 +39,13 @@ function SignUp() {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
+          });
+          setUserData({
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            confirmpassword: "",
           });
         }
       });

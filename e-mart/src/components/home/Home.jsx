@@ -4,7 +4,6 @@ import styles from "./Home.module.css";
 
 function Home() {
   return (
-    
     <div>
       <CardGroup className="mt-5">
         <Card>
@@ -22,7 +21,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -46,9 +45,9 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
-                <Button variant="success">Add to  Cart</Button>{" "}
+                <Button variant="success">Add to Cart</Button>{" "}
               </a>
               <a id="btn_view">
                 <Button variant="dark">View Item</Button>{" "}
@@ -71,7 +70,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -98,7 +97,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -122,7 +121,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -147,7 +146,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -174,7 +173,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -198,7 +197,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
@@ -223,7 +222,7 @@ function Home() {
             </Card.Text>
           </Card.Body>
           <Card.Footer>
-            <div class="row_btn">
+            <div className="row_btn">
               <a id="btn_buy">
                 <Button variant="success">Add to Cart</Button>{" "}
               </a>
