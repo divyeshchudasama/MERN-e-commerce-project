@@ -1,36 +1,39 @@
 const UserModel = require("./user.entity");
-const loginUser = async (userInfo) => {
+
+const loginUser = (userInfo) => {
   // mongoose code
-  await UserModel.find({
+  // return new Promise((resolve, reject) => {
+  //   UserModel.findOne(
+  //     { email: userInfo.email, password: userInfo.password },
+  //     function (err, user) {
+  //       if (err) {
+  //         reject({ message: "Internal Server Error", status: 500 });
+  //       } else if (user) {
+  //         console.log(user);
+  //         // password is correct or not
+  //         resolve({ message: "valid user", status: 200, details: user });
+  //       } else {
+  //         reject({ message: "invalid user", status: 403 });
+  //       }
+  //     }
+  //   );
+  // });
+
+  let userData = UserModel.findOne({
     email: `${userInfo.email}`,
     password: `${userInfo.password}`,
-  }).exec((err, emp) => {
-    if (err) {
-      console.log("Something wrong");
-    } else {
-      console.log(emp, "dao1");
-      return emp;
-    }
   });
+  return userData;
 };
 const registerUser = async (userInfo) => {
   // create instance
-  console.log(userInfo, "dvs");
   var newObj = new UserModel({
     firstname: `${userInfo.firstname}`,
     lastname: `${userInfo.lastname}`,
     email: `${userInfo.email}`,
     password: `${userInfo.password}`,
   });
-  await newObj.save((err, emp) => {
-    if (err) {
-      console.log("Sorry! Please try again");
-    } else {
-      console.log("Data inserted");
-      console.log(emp, "emp");
-      return emp;
-    }
-  });
+  return await newObj.save();
 };
 module.exports = {
   loginUser,

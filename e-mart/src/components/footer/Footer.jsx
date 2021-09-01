@@ -55,10 +55,11 @@ function Footer() {
         </div>
         <div className={`${styles.bottfoot}`}>
           <p className="text-center mb-0">
-            Copyright @2021 Restant . All Rights Reserved By{" "}
+            Copyright @2021,{" "}
             <a href="/" className="font-weight-bold text-light">
               E-mart
             </a>
+            . All Rights Reserved
           </p>
         </div>
       </footer>
