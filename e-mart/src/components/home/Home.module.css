@@ -1,0 +1,14 @@
+
+.row_btn a {
+    width: 50%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 6px;
+}
+.imgheight
+{
+    max-height: 300px;
+}
