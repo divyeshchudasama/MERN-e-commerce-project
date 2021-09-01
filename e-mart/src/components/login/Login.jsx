@@ -4,13 +4,43 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faKey } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import styles from "./Login.module.css";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const loginHandle = (event) => {
     event.preventDefault();
-    console.log(email + "  " + password);
+    let userDetails = {
+      email: email,
+      password: password,
+    };
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    axios
+      .post(`http://localhost:8000/api/v1/users/login`, userDetails, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const data = res.data;
+          console.log(data);
+          toast.success("You are successfully logged in", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else {
+          console.log("check email password");
+        }
+      });
   };
   return (
     <>
@@ -73,6 +103,17 @@ function Login() {
           </Card>
         </Col>
       </Row>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
