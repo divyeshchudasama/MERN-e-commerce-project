@@ -34,7 +34,7 @@ function Login() {
           if (data) {
             dispatch(addUser(data));
             localStorage.setItem("user", JSON.stringify(data));
-            history.push({ pathname: "/", state: "" });
+            history.push({ pathname: "/", state: "success" });
           }
         } else {
           console.log("check email password");

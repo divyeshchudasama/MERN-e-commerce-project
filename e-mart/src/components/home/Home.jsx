@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CardGroup, Card, Button } from "react-bootstrap";
 import styles from "./Home.module.css";
+import { ToastContainer, toast } from "react-toastify";
+// import { useLocation } from "react-router-dom";
 
 function Home() {
+  // const location = useLocation();
+  // let msg = location.state;
+  useEffect(() => {
+    let user = JSON.parse(localStorage.getItem("user"));
+    console.log(user);
+    if (user) {
+      toast.success(`${""} Logged in Successfully!`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  }, []);
   return (
-    <div>
+    <>
       <CardGroup className="mt-5">
         <Card>
           <Card.Img
@@ -233,7 +252,18 @@ function Home() {
           </Card.Footer>
         </Card>
       </CardGroup>
-    </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 }
 
