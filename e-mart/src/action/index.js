@@ -4,6 +4,12 @@ export const addUser = (data) => {
     payload: data,
   };
 };
+export const addCart = (data) => {
+  return {
+    type: "ADD_CART",
+    payload: data,
+  };
+};
 // export const removeUser = (data) => {
 //   return {
 //     type: "REMOVE_USER",

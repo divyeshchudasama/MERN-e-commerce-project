@@ -1,257 +1,102 @@
-import React, { useEffect } from "react";
-import { CardGroup, Card, Button } from "react-bootstrap";
-import styles from "./Home.module.css";
+import { Button, Card, Col, Row } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import galaxy from "../../images/galaxy.jpg";
 import { ToastContainer, toast } from "react-toastify";
-// import { useLocation } from "react-router-dom";
 
 function Home() {
-  // const location = useLocation();
-  // let msg = location.state;
-  useEffect(() => {
-    let user = JSON.parse(localStorage.getItem("user"));
-    console.log(user);
-    if (user) {
-      toast.success(`${""} Logged in Successfully!`, {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+  const uID = JSON.parse(localStorage.getItem("user"));
+  const [product, setProduct] = useState([]);
+  const getProducts = () => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    axios
+      .get(`http://localhost:8000/api/v1/products/allproducts`, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const data = res.data.details;
+          setProduct(data);
+        }
       });
-    }
+  };
+  useEffect(() => {
+    getProducts();
   }, []);
+  const history = useHistory();
+  const showDetails = (p) => {
+    history.push({ pathname: "/details", state: p });
+  };
+  const addTocart = (p) => {
+    const uID = JSON.parse(localStorage.getItem("user"));
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    const pInfo = {
+      userid: uID.email,
+      pid: p.id,
+      pname: p.name,
+      pprice: p.price,
+      pquantity: 1,
+    };
+    axios
+      .post(`http://localhost:8000/api/v1/cart/addtocart`, pInfo, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          // const data = res.data.details;
+          toast.success(`Product added to cart.`, {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
+  };
   return (
     <>
-      <CardGroup className="mt-5">
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287781/ecommerce/t5ycokodqfoe9dkqgaf7.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Glass</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287748/ecommerce/ds52cjkcr4t0fvrnt6y6.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Vest</Card.Title>
-            <Card.Text>
-              This card has supporting text below as a natural lead-in to
-              additional content.{" "}
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287704/ecommerce/kqu2ktbrfmb5cjqbom2n.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Cool</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This card has even longer content
-              than the first to show that equal height action.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-      </CardGroup>
-      <CardGroup className="mt-5">
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287781/ecommerce/t5ycokodqfoe9dkqgaf7.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Glass</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287748/ecommerce/ds52cjkcr4t0fvrnt6y6.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Vest</Card.Title>
-            <Card.Text>
-              This card has supporting text below as a natural lead-in to
-              additional content.{" "}
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287704/ecommerce/kqu2ktbrfmb5cjqbom2n.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Cool</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This card has even longer content
-              than the first to show that equal height action.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-      </CardGroup>
-      <CardGroup className="mt-5">
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287781/ecommerce/t5ycokodqfoe9dkqgaf7.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Glass</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This content is a little bit
-              longer.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287748/ecommerce/ds52cjkcr4t0fvrnt6y6.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Vest</Card.Title>
-            <Card.Text>
-              This card has supporting text below as a natural lead-in to
-              additional content.{" "}
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-        <Card>
-          <Card.Img
-            variant="top"
-            className={styles.imgheight}
-            src="https://res.cloudinary.com/devatchannel/image/upload/v1598287704/ecommerce/kqu2ktbrfmb5cjqbom2n.jpg"
-          />
-          <Card.Body>
-            <Card.Title>Man Cool</Card.Title>
-            <Card.Text>
-              This is a wider card with supporting text below as a natural
-              lead-in to additional content. This card has even longer content
-              than the first to show that equal height action.
-            </Card.Text>
-          </Card.Body>
-          <Card.Footer>
-            <div className="row_btn">
-              <a id="btn_buy">
-                <Button variant="success">Add to Cart</Button>{" "}
-              </a>
-              <a id="btn_view">
-                <Button variant="dark">View Item</Button>{" "}
-              </a>
-            </div>
-          </Card.Footer>
-        </Card>
-      </CardGroup>
+      <Row className="my-4">
+        {product.map((p) => (
+          <Col key={p.id} xxl={3}>
+            <Card className="mb-4">
+              <Card.Img variant="top" src={galaxy} draggable="false" />
+              <Card.Body className="text-center">
+                <Card.Title>{p.name}</Card.Title>
+                <p>Price: {p.price}</p>
+                {/* <Card.Text>{p.description}</Card.Text> */}
+                <div>
+                  <Button variant="primary" onClick={() => showDetails(p)}>
+                    View Details
+                  </Button>
+                  {uID ? (
+                    <>
+                      <Button
+                        className="ms-3"
+                        variant="dark"
+                        onClick={() => addTocart(p)}
+                      >
+                        Add to cart
+                      </Button>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

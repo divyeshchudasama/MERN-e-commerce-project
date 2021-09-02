@@ -1,73 +1,109 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faStar } from "@fortawesome/free-solid-svg-icons";
-import styles from "./Details.module.css";
-import images from "../../images/bird.jpg"
+import React, { useState, useEffect } from "react";
+// import styles from "./Details.module.css";
+import { useLocation } from "react-router-dom";
+import { Button, Card, Col, Row } from "react-bootstrap";
+import axios from "axios";
+import galaxy from "../../images/galaxy.jpg";
+import { ToastContainer, toast } from "react-toastify";
 
 function Details() {
+  const [product, setProduct] = useState({});
+  const location = useLocation().state;
+  let productData = location;
+  const uID = JSON.parse(localStorage.getItem("user"));
+  const getOneProducts = () => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    axios
+      .get(`http://localhost:8000/api/v1/products/getone/${productData.id}`, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const data = res.data.details;
+          setProduct(data);
+        }
+      });
+  };
+  useEffect(() => {
+    getOneProducts();
+    window.scrollTo(0, 0);
+  }, [getOneProducts()]);
+  const addToCart = () => {
+    const uID = JSON.parse(localStorage.getItem("user"));
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    const pInfo = {
+      userid: uID.email,
+      pid: product.id,
+      pname: product.name,
+      pprice: product.price,
+      pquantity: 1,
+    };
+    axios
+      .post(`http://localhost:8000/api/v1/cart/addtocart`, pInfo, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          // const data = res.data.details;
+          toast.success(`Product added to cart.`, {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      });
+  };
   return (
-    <section>
-      <div className="container my-5">
-        <div className="row">
-          <div className="col-lg-5 col-sm-5 col-12">
-            <div >
-              <img  src={images} alt="" className={styles.dimage}></img>
-            </div>
+    <>
+      <Row className="my-4">
+        <Col xxl={5}>
+          <Card>
+            <Card.Img src={galaxy} draggable="false" />
+          </Card>
+        </Col>
+        <Col className="ms-5" xxl={6}>
+          <div>
+            <h2>{product.name}</h2>
           </div>
-          <div className="col-lg-7 col-sm-7 col-12">
-            <div className="">
-              <h4>Accuseantium Doloremque</h4>
-            </div>
-
-            <div className="rating-wapper my-2">
-              <span className="">
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-                <FontAwesomeIcon icon={faStar} />
-              </span>
-              <a href="" className="m-3">1 reviews</a>
-            </div>
-            <div className="">
-              <ul className={styles.deus} >
-                <li><span className={styles.decs}>Manufacture</span><h6>DGP</h6></li>
-                <li><span className={styles.decs}>Product Code</span>Product123</li>
-                <li><span className={styles.decs}>Reward Points</span>300</li>
-                <li><span className={styles.decs}>Avaliabilty</span>In Stock</li>
-              </ul>
-            </div>
-            <div className="my-3">
-              <h4>Description</h4>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque mollitia harum quae corrupti vero minus alias molestias
-                 non neque fuga doloribus doloremque voluptates iusto iure pariatur vitae, cum qui cumque?</p>
-            </div>
-            <div className={`d-flex justify-content-between align-item-center points`}>
-          
-                <div className="">
-                  <ul className="list-unstyled">
-                    <li><h3 className="">Rs.500/-</h3></li>
-                    <li className="">Ex Tax: Rs. 85.00</li>
-               
-                  </ul>
-                </div>
-                <div className="">
-                  <label>QTY</label>
-                  <input type="text" name="quality" value="1" size="2" id="" className={styles.qty}></input>
-                  <button variant="success"
-                        className={`${styles.btn}`}
-                        type="submit">Add To cart</button>
-                
-                </div>
-            </div>
-            
+          <div>Price: {product.price}</div>
+          <div>{product.description}</div>
+          <div className="mt-4">
+            {uID ? (
+              <>
+                <Button variant="dark" onClick={addToCart}>
+                  Add to cart
+                </Button>
+              </>
+            ) : (
+              <div className="text-danger fw-bold">
+                <p>Please login to add products in cart!</p>
+              </div>
+            )}
           </div>
-        </div>
-      </div>
-    </section>
-    // <div>
-    //   <h3>Details</h3>
-    //   <h2>Praveen</h2>
-    // </div>
+        </Col>
+      </Row>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 }
 

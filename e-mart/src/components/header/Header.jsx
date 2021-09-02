@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, Dropdown, NavDropdown } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart, faUserCheck } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styles from "./Header.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { addUser } from "../../action/index";
@@ -10,18 +10,18 @@ import { addUser } from "../../action/index";
 function Header() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.addUserData);
-
+  const history = useHistory();
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem("user"));
-    console.log(user);
     if (user) {
-      dispatch(addUser(user));
+      dispatch(addUser(user)); // adding to redux
     } else {
       dispatch(addUser({}));
     }
-  }, []);
+  }, [dispatch]);
   const logout = () => {
     localStorage.removeItem("user");
+    history.push("/");
     dispatch(addUser({}));
   };
   return (
@@ -39,16 +39,19 @@ function Header() {
           </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mx-auto">
-              <Link className="nav-link text-white mx-4" to="/">
+            <Nav className="ms-auto">
+              <Link className="nav-link text-white me-5" to="/">
                 SHOP
-              </Link>
-              <Link className="nav-link text-white mx-4" to="/cart">
-                CART <FontAwesomeIcon icon={faShoppingCart} />
               </Link>
             </Nav>
             {data.firstname ? (
               <>
+                <Link className="nav-link text-white me-5" to="/cart">
+                  CART <FontAwesomeIcon icon={faShoppingCart} />
+                  {/* <span className="badge rounded-pill bg-light text-dark ms-1">
+                    {cartRedux.length}
+                  </span> */}
+                </Link>
                 <FontAwesomeIcon className="text-white" icon={faUserCheck} />
                 <Nav className="me-0">
                   <NavDropdown
