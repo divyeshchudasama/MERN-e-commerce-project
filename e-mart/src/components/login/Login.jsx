@@ -5,7 +5,6 @@ import { faUser, faKey } from "@fortawesome/free-solid-svg-icons";
 import { Link, useHistory } from "react-router-dom";
 import styles from "./Login.module.css";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../action/index";
 
@@ -34,7 +33,8 @@ function Login() {
           if (data) {
             dispatch(addUser(data));
             localStorage.setItem("user", JSON.stringify(data));
-            history.push({ pathname: "/", state: "success" });
+            alert("Logged In Successfull");
+            history.push({ pathname: "/", state: 1 });
           }
         } else {
           console.log("check email password");
@@ -102,17 +102,6 @@ function Login() {
           </Card>
         </Col>
       </Row>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </>
   );
 }

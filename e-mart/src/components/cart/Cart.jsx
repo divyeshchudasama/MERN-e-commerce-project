@@ -1,96 +1,158 @@
-import React, {useState}from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Card, Col, Row, Table, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, toast } from "react-toastify";
+import cart from "../../images/emptycart.png";
 import { Link } from "react-router-dom";
-import styles from "./Cart.module.css";
-import images from "../../images/bird.jpg"
-
 
 function Cart() {
-
- const [count, setCount] = useState(0)
-  const decrementValue = () => {
-      setCount(count-1)
-  }
-
-  const incrementValue = () => {
-    setCount(count+1)
-   }
+  const [cartProd, setCartProd] = useState([]);
+  const getCartProducts = () => {
+    const uID = JSON.parse(localStorage.getItem("user"));
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    axios
+      .get(`http://localhost:8000/api/v1/cart/cartprod/${uID.email}`, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const data = res.data.details;
+          setCartProd(data);
+        }
+      });
+  };
+  useEffect(() => {
+    getCartProducts();
+    window.scrollTo(0, 0);
+  }, []);
+  const deleteFromCart = (pid) => {
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+    };
+    axios
+      .delete(`http://localhost:8000/api/v1/cart/delete/${pid}`, {
+        headers: headers,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(`Removed from cart.`, {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          getCartProducts();
+        }
+      });
+  };
   return (
-    <section>
-      <div className="container py-5">
-        <div className="">
-          <div className="row">
-            <div className="col-lg-8 col-sm-8 col-12">
-              <div className="table-responsive">
-                <table className="table">
+    <>
+      <div style={{ minHeight: "70vh" }}>
+        <div className="mt-4">
+          <h4>Cart</h4>
+        </div>
+        {cartProd.length === 0 ? (
+          <>
+            <div className="text-center">
+              <img alt="" src={cart} style={{ width: "auto" }} />
+            </div>
+            <div className="text-center">
+              <Link to="/">
+                <Button variant="success">
+                  Continue Shopping <FontAwesomeIcon icon={faCartPlus} />
+                </Button>
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <Row className="my-4">
+              <Col xxl={8}>
+                <Table striped bordered hover>
                   <thead>
-                    <tr className={styles.cartBg}>
-                      <th className="text-white p-3">Product</th>
-                      <th className="text-white p-3">Quantity</th>
-                      <th className="text-white p-3">Price</th>
-                      <th className="text-white p-3">Subtotal</th>
+                    <tr>
+                      <th>Product Name</th>
+                      <th className="text-end">Price</th>
+                      <th className="text-end">Quantity</th>
+                      <th className="text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody className="">
-                    <tr>
-                      <td>
-                          <div className="">
-                            {/* <p className="">LENOVO G50</p> */}
-                            <Link className={styles.links} to="/details">
-                             LENONO G50
-                             </Link>
-                          </div>
-                      </td>
-                      <td>
-                        <div className="mc-count">
-                          <input type="button" onClick="decrementValue()" value="-" className={styles.inc} onClick={decrementValue}/>
-                          <input type="text" name="quantity" value={count} maxLength="2" max="100" size="1" id="number" className={styles.num}/>
-                          <input type="button" onClick="incrementValue()" value="+" className={styles.inc} onClick={incrementValue}/>
-                        </div>
-                      </td>
-                      <td className="text-muted">Rs.500</td>
-                      <td className="font-width-bold">Rs. 555/-  <FontAwesomeIcon icon={faTrash} /></td>
-                    </tr>
+                  <tbody>
+                    {cartProd.map((p) => (
+                      <tr key={p._id}>
+                        <td>{p.pname}</td>
+                        <td className="text-end">{p.pprice}</td>
+                        <td className="text-end">{p.pquantity}</td>
+                        <td className="text-center">
+                          <Button
+                            variant="dark"
+                            className="px-3"
+                            onClick={() => deleteFromCart(p._id)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="col-lg-4 col-sm-4 col-12">
-              <div className="">
-                <div className={styles.cartBg}>
-                  <h5 className={`text-white py-3 text-center mb-0`}>Your Order <span className={styles.detf}>(Details)</span></h5>
-                </div>
-                <div className="border py-3 px-3">
-                  <h5 className={`${styles.d} font-weight-bold`}>Billing Details</h5>
-                  <div className="d-flex justify-content-between">
-                    <div className="text-muted">Items Total</div>
-                    <div className="text-muted"> Rs. 500/-</div>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <div className="text-muted">Delevery Fee</div>
-                    <div className="text-muted"> Rs. 00/-</div>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <div className="text-muted">Tax & clear</div>
-                    <div className="text-muted"> Rs. 00/-</div>
-                  </div>
-                  <hr></hr>
-                  <div className="d-flex justify-content-between">
-                    <div className="text-muted"><h6>Total</h6></div>
-                    <div className="text-muted"><h6>Rs.500/-</h6></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-         
-        </div>
-
+                </Table>
+              </Col>
+              <Col xxl={4}>
+                <Card>
+                  <Card.Body>
+                    <div>
+                      <h6>Billing Details</h6>
+                    </div>
+                    <Table>
+                      <thead></thead>
+                      <tbody>
+                        <tr>
+                          <td>Items Total:</td>
+                          <td>Rs. 500/-</td>
+                        </tr>
+                        <tr>
+                          <td>Delevery Fee:</td>
+                          <td>Rs. 00/-</td>
+                        </tr>
+                        <tr>
+                          <td>Total Tax:</td>
+                          <td>Rs. 00/-</td>
+                        </tr>
+                        <tr className="fw-bold">
+                          <td>Total Price:</td>
+                          <td>Rs. 500/-</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </>
+        )}
       </div>
-    </section>
 
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   );
 }
 
