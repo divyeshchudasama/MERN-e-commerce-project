@@ -7,39 +7,84 @@ import styles from "./Login.module.css";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../action/index";
+import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
+  const validation = () => {
+    if (!email) {
+      return false;
+    } else if (!password) {
+      return false;
+    } else {
+      return true;
+    }
+  };
   const loginHandle = (event) => {
     event.preventDefault();
-    let userDetails = {
-      email: email,
-      password: password,
-    };
-    const headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-    };
-    axios
-      .post(`http://localhost:8000/api/v1/users/login`, userDetails, {
-        headers: headers,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          const data = res.data.details;
-          if (data) {
-            dispatch(addUser(data));
-            localStorage.setItem("user", JSON.stringify(data));
-            alert("Logged In Successfull");
-            history.push({ pathname: "/", state: 1 });
+    if (validation() === true) {
+      let userDetails = {
+        email: email,
+        password: password,
+      };
+      const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      };
+      axios
+        .post(`http://localhost:8000/api/v1/users/login`, userDetails, {
+          headers: headers,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            const data = res.data.details;
+            if (data) {
+              dispatch(addUser(data));
+              localStorage.setItem("user", JSON.stringify(data));
+              toast.success(`Logged in Successfully!`, {
+                position: "bottom-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              setTimeout(() => {
+                history.push({ pathname: "/", state: 1 });
+              }, 1500);
+            }
+          } else {
+            console.log("check email password");
           }
-        } else {
-          console.log("check email password");
-        }
-      });
+        });
+    } else {
+      if (!email) {
+        toast.error(`Please enter an Email`, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } else if (!password) {
+        toast.error(`Please enter a Password`, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
   };
   return (
     <>
@@ -102,6 +147,17 @@ function Login() {
           </Card>
         </Col>
       </Row>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
