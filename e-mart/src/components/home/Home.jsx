@@ -3,11 +3,16 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import galaxy from "../../images/galaxy.jpg";
+import styles from "./Home.module.css";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { addCart } from "../../action/index";
 
 function Home() {
   const uID = JSON.parse(localStorage.getItem("user"));
   const [product, setProduct] = useState([]);
+  const cartdata = useSelector((state) => state.addCartData);
+  const dispatch = useDispatch();
   const getProducts = () => {
     const headers = {
       "Access-Control-Allow-Origin": "*",
@@ -51,6 +56,7 @@ function Home() {
       .then((res) => {
         if (res.status === 200) {
           // const data = res.data.details;
+          dispatch(addCart(cartdata + 1));
           toast.success(`Product added to cart.`, {
             position: "bottom-right",
             autoClose: 3000,
@@ -67,7 +73,7 @@ function Home() {
     <>
       <Row className="my-4">
         {product.map((p) => (
-          <Col key={p.id} xxl={3}>
+          <Col key={p.id} md={4} lg={3} xl={3} xxl={3}>
             <Card className="mb-4">
               <Card.Img variant="top" src={galaxy} draggable="false" />
               <Card.Body className="text-center">
@@ -75,13 +81,17 @@ function Home() {
                 <p>Price: {p.price}</p>
                 {/* <Card.Text>{p.description}</Card.Text> */}
                 <div>
-                  <Button variant="primary" onClick={() => showDetails(p)}>
+                  <Button
+                    className={styles.buttonStyle}
+                    variant="primary"
+                    onClick={() => showDetails(p)}
+                  >
                     View Details
                   </Button>
                   {uID ? (
                     <>
                       <Button
-                        className="ms-3"
+                        className={`ms-3 ${styles.buttonStyle}`}
                         variant="dark"
                         onClick={() => addTocart(p)}
                       >

@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Footer.module.css";
+import { ToastContainer, toast } from "react-toastify";
 
 function Footer() {
+  const [email, setemail] = useState("");
+  const subuser = () => {
+    toast.success(`Thank you for subscribing.`, {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
   return (
     <>
       <footer className={`footer mt-auto  bg-default ${styles.footerBg}`}>
@@ -27,7 +40,13 @@ function Footer() {
                   required
                 ></input>
                 <div className="">
-                  <button type="submit" className="btn btn-success btn-sm">
+                  <button
+                    type="email"
+                    className="btn btn-success btn-sm"
+                    value={email}
+                    onChange={(e) => setemail(e.target.value)}
+                    onClick={subuser}
+                  >
                     Subscribe
                   </button>
                 </div>
@@ -62,6 +81,17 @@ function Footer() {
           </p>
         </div>
       </footer>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }

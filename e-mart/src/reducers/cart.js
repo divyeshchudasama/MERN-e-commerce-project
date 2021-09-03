@@ -1,4 +1,4 @@
-const initialState = [];
+const initialState = 0;
 const addCartData = (state = initialState, action) => {
   if (action.type === "ADD_CART") {
     return action.payload;

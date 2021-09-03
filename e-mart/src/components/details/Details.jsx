@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
-// import styles from "./Details.module.css";
-import { useLocation } from "react-router-dom";
+import styles from "./Details.module.css";
+import { Link, useLocation } from "react-router-dom";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import galaxy from "../../images/galaxy.jpg";
 import { ToastContainer, toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { addCart } from "../../action/index";
 
 function Details() {
   const [product, setProduct] = useState({});
   const location = useLocation().state;
   let productData = location;
+
+  const cartdata = useSelector((state) => state.addCartData);
+  const dispatch = useDispatch();
+
   const uID = JSON.parse(localStorage.getItem("user"));
   const getOneProducts = () => {
     const headers = {
@@ -30,7 +36,7 @@ function Details() {
   useEffect(() => {
     getOneProducts();
     window.scrollTo(0, 0);
-  }, [getOneProducts()]);
+  }, []);
   const addToCart = () => {
     const uID = JSON.parse(localStorage.getItem("user"));
     const headers = {
@@ -50,6 +56,7 @@ function Details() {
       })
       .then((res) => {
         if (res.status === 200) {
+          dispatch(addCart(cartdata + 1));
           // const data = res.data.details;
           toast.success(`Product added to cart.`, {
             position: "bottom-right",
@@ -66,21 +73,28 @@ function Details() {
   return (
     <>
       <Row className="my-4">
-        <Col xxl={5}>
+        <Col md={5} lg={5} xl={5} xxl={5}>
           <Card>
             <Card.Img src={galaxy} draggable="false" />
           </Card>
         </Col>
-        <Col className="ms-5" xxl={6}>
-          <div>
+        <Col className="ms-5" md={6} lg={6} xl={6} xxl={6}>
+          <div className="my-2">
             <h2>{product.name}</h2>
           </div>
-          <div>Price: {product.price}</div>
-          <div>{product.description}</div>
+          <div className="fw-bold my-2">Price: {product.price}</div>
+          <div className="my-2 fw-bold">Description:</div>
+          <div className="lh-lg" style={{ textAlign: "justify" }}>
+            {product.description}
+          </div>
           <div className="mt-4">
             {uID ? (
               <>
-                <Button variant="dark" onClick={addToCart}>
+                <Button
+                  variant="dark"
+                  className={styles.buttonStyle}
+                  onClick={addToCart}
+                >
                   Add to cart
                 </Button>
               </>
@@ -89,6 +103,9 @@ function Details() {
                 <p>Please login to add products in cart!</p>
               </div>
             )}
+            <Link className="text-muted ms-4" to="/">
+              Back
+            </Link>
           </div>
         </Col>
       </Row>

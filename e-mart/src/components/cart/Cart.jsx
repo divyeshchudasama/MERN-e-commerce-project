@@ -6,9 +6,14 @@ import { faTrash, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer, toast } from "react-toastify";
 import cart from "../../images/emptycart.png";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addCart } from "../../action/index";
 
 function Cart() {
   const [cartProd, setCartProd] = useState([]);
+  const cartdata = useSelector((state) => state.addCartData);
+  const dispatch = useDispatch();
+
   const getCartProducts = () => {
     const uID = JSON.parse(localStorage.getItem("user"));
     const headers = {
@@ -41,6 +46,7 @@ function Cart() {
       })
       .then((res) => {
         if (res.status === 200) {
+          dispatch(addCart(cartdata - 1));
           toast.success(`Removed from cart.`, {
             position: "bottom-right",
             autoClose: 3000,
@@ -53,6 +59,17 @@ function Cart() {
           getCartProducts();
         }
       });
+  };
+  const placeOrder = () => {
+    toast.success(` Thank you for Shoppping.`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
   return (
     <>
@@ -76,7 +93,7 @@ function Cart() {
         ) : (
           <>
             <Row className="my-4">
-              <Col xxl={8}>
+              <Col md={8} lg={8} xl={8} xxl={8}>
                 <Table striped bordered hover>
                   <thead>
                     <tr>
@@ -106,7 +123,7 @@ function Cart() {
                   </tbody>
                 </Table>
               </Col>
-              <Col xxl={4}>
+              <Col md={4} lg={4} xl={4} xxl={4}>
                 <Card>
                   <Card.Body>
                     <div>
@@ -135,6 +152,9 @@ function Cart() {
                     </Table>
                   </Card.Body>
                 </Card>
+                <Button variant="dark w-100 mt-4" onClick={placeOrder}>
+                  Place Order
+                </Button>
               </Col>
             </Row>
           </>
